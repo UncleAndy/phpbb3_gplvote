@@ -1,0 +1,25 @@
+{
+    "name": "gplvote/signdoc",
+    "type": "phpbb-extension",
+    "description": "Using signature for forum actions",
+    "homepage": "http://gplvote.org",
+    "version": "0.0.1",
+    "time": "2015-02-16",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Andrey Velikoredchanin",
+            "homepage": "http://andyhost.ru",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "extra": {
+        "display-name": "Extension for GPLVote SignDoc mobile application",
+        "soft-require": {
+            "phpbb/phpbb": "3.1.*@dev"
+        }
+    }
+}

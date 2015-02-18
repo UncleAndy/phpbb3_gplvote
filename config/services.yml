@@ -1,0 +1,15 @@
+services:
+  gplvote.signdoc.controller:
+    class: gplvote\signdoc\controller\actions
+    arguments:
+      - @config
+      - @request
+      - @pagination
+      - @dbal.conn
+      - @auth
+      - @template
+      - @user
+      - @controller.helper
+      - %core.root_path%
+      - %core.php_ext%
+      - %core.table_prefix%
