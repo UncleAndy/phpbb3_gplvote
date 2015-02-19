@@ -1,12 +1,9 @@
 gplvote_signdoc_getdoc:
-  pattern: /sd/getdoc
+  pattern: /sd/getdoc/{doc_id}
   defaults: { _controller: gplvote.signdoc.controller:getdoc }
 gplvote_signdoc_sign:
   pattern: /sd/sign
   defaults: { _controller: gplvote.signdoc.controller:sign }
-gplvote_signdoc_register:
-  pattern: /sd/reg
-  defaults: { _controller: gplvote.signdoc.controller:register }
 gplvote_signdoc_doc_qrcode:
   pattern: /sd/qr/{doc_id}
   defaults: { _controller: gplvote.signdoc.controller:doc_qrcode }
