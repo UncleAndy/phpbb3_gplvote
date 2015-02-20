@@ -11,6 +11,16 @@ namespace gplvote\signdoc\controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use gplvote\signdoc\core\crypt;
+
+/*
+*  Идентификатор документа: "<тип>:<random>"
+*  Где <тип>:
+*    "in" - логин
+*    "p" - подпись поста
+*    "c" - подпись коммента
+*    "v" - подпись голоса
+*/
 
 class actions
 {
@@ -46,8 +56,6 @@ class actions
 
       $table = null;
       if (preg_match('/^in\:/', $doc_id)) {
-        $table = LOGIN_SIGNS;
-        
         $sql = 'SELECT * FROM '.LOGIN_SIGNS.' WHERE id = \''.$this->db->sql_escape($doc_id).'\'';
         $c = $this->db->sql_query($sql);
         $row = $this->db->sql_fetchrow($c);
@@ -67,24 +75,43 @@ class actions
   }
 
   public function sign() {
+#      error_log("DBG: sign\n", 3, "/tmp/phpbb_gplvote.log");
+      // Извлекаем тело подписи из POST контента
+      $json_doc = file_get_contents("php://input");
+      $doc = json_decode($json_doc);
   
-  
-  
-  
-  
-  
-  
-      return new Response('TEST sign', 200, array('Content-Type' => 'application/json; charset=utf-8'));
+      // Проверяем подпись
+      
+      $sign_data = '';
+      if (preg_match('/^in\:/', $doc->{'doc_id'})) {
+        // Подпись для логина
+        // Извлекаем документ из БД
+        $sql = 'SELECT * FROM '.LOGIN_SIGNS.' WHERE id = \''.$this->db->sql_escape($doc->{'doc_id'}).'\'';
+        error_log("DBG: sql for get doc: ".$sql."\n", 3, "/tmp/phpbb_gplvote.log");
+        $c = $this->db->sql_query($sql);
+        $row = $this->db->sql_fetchrow($c);
+        $this->db->sql_freeresult($c);
+        
+        $sign_data = $doc->{'site'}.":".$doc->{'doc_id'}.':["'.$row['code'].'"]:'."LIST\nКод на экране:";
+        
+        $crypt = new Crypt();
+    
+        if ($crypt->is_valid_sign($sign_data, $doc->{'sign'}, $doc->{'public_key'})) {
+          $sql = 'UPDATE '.LOGIN_SIGNS.' 
+                    SET 
+                      sign = \''.$this->db->sql_escape($doc->{'sign'}).'\', 
+                      public_key = \''.$this->db->sql_escape($doc->{'public_key'}).'\',
+                      public_key_id = \''.$crypt->get_public_key_id($doc->{'public_key'}).'\'
+                  WHERE id = \''.$this->db->sql_escape($doc->{'doc_id'}).'\'';
+          $c = $this->db->sql_query($sql);
+          $this->db->sql_freeresult($c);
+          return new Response('{"status":0}', 200, array('Content-Type' => 'application/json; charset=utf-8'));
+        } else {
+          return new Response('{"status":1}', 200, array('Content-Type' => 'application/json; charset=utf-8'));
+        };
+      };
   }
   
-  /*
-    Идентификатор документа: <тип>:<random>
-    Где <тип>:
-      "in" - логин
-      "p" - подпись поста
-      "c" - подпись коммента
-      "v" - подпись голоса
-  */
   public function doc_qrcode($doc_id) {
       $board_url = str_replace(['http://', 'https://'], '', generate_board_url());
       $signdoc_url = 'signdoc://'.$board_url.'/sd/getdoc/'.$doc_id;
