@@ -1,4 +1,5 @@
 <?php
+
 /**
 *
 * @package phpBB Extension - GPLVote SignDoc
@@ -101,7 +102,8 @@ class actions
                     SET 
                       sign = \''.$this->db->sql_escape($doc->{'sign'}).'\', 
                       public_key = \''.$this->db->sql_escape($doc->{'public_key'}).'\',
-                      public_key_id = \''.$crypt->get_public_key_id($doc->{'public_key'}).'\'
+                      public_key_id = \''.$crypt->get_public_key_id($doc->{'public_key'}).'\',
+                      signed_at = '.time().'
                   WHERE id = \''.$this->db->sql_escape($doc->{'doc_id'}).'\'';
           $c = $this->db->sql_query($sql);
           $this->db->sql_freeresult($c);
@@ -116,6 +118,6 @@ class actions
       $board_url = str_replace(['http://', 'https://'], '', generate_board_url());
       $signdoc_url = 'signdoc://'.$board_url.'/sd/getdoc/'.$doc_id;
       
-      return new RedirectResponse('http://chart.apis.google.com/chart?cht=qr&chs=150x150&chl='.$signdoc_url, 301);
+      return new RedirectResponse('http://chart.apis.google.com/chart?cht=qr&chs=250x250&chl='.$signdoc_url, 301);
   }
 }

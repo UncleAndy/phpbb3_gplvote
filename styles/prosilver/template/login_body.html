@@ -1,0 +1,17 @@
+<h2 class="login-title"><!-- IF LOGIN_EXPLAIN -->{LOGIN_EXPLAIN}<!-- ELSE -->{L_LOGIN}<!-- ENDIF --></h2>
+<style>
+  #login .panel .inner .content {
+    display: none;
+  }
+</style>
+<p>
+<!-- IF LOGIN_ERROR --><div class="error" style="text-align:center;">{LOGIN_ERROR}</div><!-- ENDIF -->
+</p>
+<p align="center">
+<input name="{PASSWORD_CREDENTIAL}" value="{GPLVOTE_CODE}" readonly style="font-size: 20px;font-weight: bold;text-align:center;" />
+<input type="hidden" name="{USERNAME_CREDENTIAL}" value="{GPLVOTE_NEW_USERNAME}" />
+</p>
+<p align="center"><a href="{GPLVOTE_GETDOC_URL}"><img src="{GPLVOTE_QRCODE_IMG}" /></a></p>
+<p align="center">
+<input type="submit" name="login" value="{L_LOGIN}" class="button1" />
+</p>

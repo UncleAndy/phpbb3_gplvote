@@ -13,3 +13,5 @@ services:
       - %core.root_path%
       - %core.php_ext%
       - %core.table_prefix%
+imports:
+  - { resource: auth.yml }

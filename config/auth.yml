@@ -1,0 +1,13 @@
+services:
+    auth.provider.gplvote_only:
+        class: gplvote\signdoc\auth\provider\gplvote
+        arguments:
+            - @dbal.conn
+            - @config
+            - @request
+            - @user
+            - %core.root_path%
+            - %core.php_ext%
+            - %core.table_prefix%
+        tags:
+            - { name: auth.provider }
