@@ -58,4 +58,12 @@ class migration_20150218170400_first extends \phpbb\db\migration\migration
                         ),
                 );
         }
+        
+        public function update_data() {
+                return array(
+                        array('config.update', array('require_activation', '3')),
+                        array('config.update', array('allow_namechange', '1')),
+                        array('config.update', array('allow_password_reset', '0')),
+                );
+        }
 }
